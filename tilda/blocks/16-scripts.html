@@ -1,0 +1,236 @@
+<!-- СКРИПТЫ сайта na-avtogaz.ru: калькулятор, переключатель цен, аккордеон,
+     появление секций при прокрутке. Этот блок должен быть ПОСЛЕДНИМ. -->
+<script>
+(function(){
+  'use strict';
+  var ROOTS = [].slice.call(document.querySelectorAll('.na'));
+  if(!ROOTS.length) ROOTS = [document];
+  var $  = function(s,r){ if(r) return r.querySelector(s);
+    for(var i=0;i<ROOTS.length;i++){ var e=ROOTS[i].querySelector(s); if(e) return e } return null };
+  var $$ = function(s,r){ if(r) return Array.prototype.slice.call(r.querySelectorAll(s));
+    var out=[]; ROOTS.forEach(function(x){ out = out.concat(Array.prototype.slice.call(x.querySelectorAll(s))) }); return out };
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- разбивка заголовка на слова ---------- */
+  $$('[data-split]').forEach(function(el){
+    var html = el.innerHTML.trim();
+    var parts = html.split(/(<em>.*?<\/em>|\s+)/g).filter(function(p){return p && p.trim()});
+    el.innerHTML = parts.map(function(p,i){
+      return '<span class="word" style="--d:'+(120+i*62)+'ms">'+p+'</span>';
+    }).join(' ');
+  });
+
+  /* ---------- появление по скроллу ---------- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); }
+    });
+  }, {threshold:0.08, rootMargin:'0px 0px 8% 0px'});
+  $$('[data-anim], .gib__i').forEach(function(el){ io.observe(el) });
+
+  var ioW = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        $$('.word', e.target).forEach(function(w){ w.classList.add('is-in') });
+        ioW.unobserve(e.target);
+      }
+    });
+  }, {threshold:0.2});
+  $$('[data-split]').forEach(function(el){ ioW.observe(el) });
+
+  /* ---------- шапка, прогресс, параллакс героя ---------- */
+  var hdr = $('#hdr'), prog = $('#prog'), heroIn = $('#heroIn'), heroVid = $('#heroVid'),
+      hero = $('.hero'), lastY = 0, ticking = false;
+
+  function onScroll(){
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    var docH = document.documentElement.scrollHeight - window.innerHeight;
+    prog.style.width = (docH > 0 ? (y/docH*100) : 0) + '%';
+
+    if(y > 40) hdr.classList.add('is-stuck'); else hdr.classList.remove('is-stuck');
+    if(y > 620 && y > lastY + 6) hdr.classList.add('is-hidden');
+    else if(y < lastY - 6 || y < 200) hdr.classList.remove('is-hidden');
+    lastY = y;
+
+    if(!reduced && hero && y < window.innerHeight * 1.25){
+      var p = Math.min(y / Math.max(window.innerHeight,1), 1);
+      if(heroVid) heroVid.style.transform = 'scale(' + (1.12 - p*0.12) + ') translateY(' + (p*7) + '%)';
+      if(heroIn){
+        heroIn.style.transform = 'translateY(' + (p*-64) + 'px)';
+        heroIn.style.opacity = String(Math.max(0, 1 - p*1.35));
+      }
+    }
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ ticking = true; window.requestAnimationFrame(onScroll) }
+  }, {passive:true});
+  onScroll();
+
+  /* ---------- мобильное меню ---------- */
+  var burger = $('#burger'), mnav = $('#mnav');
+  function closeNav(){ mnav.classList.remove('is-open'); document.body.style.overflow=''; }
+  burger.addEventListener('click', function(){
+    var open = mnav.classList.toggle('is-open');
+    document.body.style.overflow = open ? 'hidden' : '';
+    $$('a', mnav).forEach(function(a,i){ a.style.transitionDelay = open ? (90+i*55)+'ms' : '0ms' });
+  });
+  $$('a', mnav).forEach(function(a){ a.addEventListener('click', closeNav) });
+
+  /* ---------- калькулятор экономии ---------- */
+  var R = {km:$('#rKm'), fuel:$('#rFuel'), pb:$('#rPb'), pg:$('#rPg'), inst:$('#rInst')};
+  var V = {km:$('#vKm'), fuel:$('#vFuel'), pb:$('#vPb'), pg:$('#vPg'), inst:$('#vInst')};
+  var O = {year:$('#oYear'), month:$('#oMonth'), pay:$('#oPayback'), petrol:$('#oPetrol'), gas:$('#oGas')};
+  var GAS_EXTRA = 1.12;
+  var nf = function(n){ return Math.round(n).toLocaleString('ru-RU').replace(/ /g,' ') };
+
+  function tween(el, to, suffix, dec){
+    if(!el) return;
+    var from = parseFloat((el.getAttribute('data-v')||'0')) || 0;
+    el.setAttribute('data-v', String(to));
+    if(reduced){ el.textContent = (dec ? to.toFixed(1).replace('.',',') : nf(to)) + (suffix||''); return }
+    var t0 = performance.now(), dur = 520;
+    function step(t){
+      var k = Math.min((t-t0)/dur, 1);
+      k = 1 - Math.pow(1-k, 3);
+      var val = from + (to-from)*k;
+      el.textContent = (dec ? val.toFixed(1).replace('.',',') : nf(val)) + (suffix||'');
+      if(k < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function calc(){
+    var km = +R.km.value, fuel = +R.fuel.value, pb = +R.pb.value, pg = +R.pg.value, inst = +R.inst.value;
+    V.km.innerHTML   = nf(km) + ' <span>км</span>';
+    V.fuel.innerHTML = fuel.toFixed(1).replace('.',',') + ' <span>л / 100 км</span>';
+    V.pb.innerHTML   = nf(pb) + ' <span>₽ / л</span>';
+    V.pg.innerHTML   = nf(pg) + ' <span>₽ / л</span>';
+    V.inst.innerHTML = nf(inst) + ' <span>₽</span>';
+
+    var costP = km/100 * fuel * pb;
+    var costG = km/100 * fuel * GAS_EXTRA * pg;
+    var save  = Math.max(costP - costG, 0);
+
+    tween(O.year, save*12, ' ');
+    tween(O.month, save, ' ₽');
+    tween(O.petrol, costP, ' ₽');
+    tween(O.gas, costG, ' ₽');
+
+    if(save > 0){
+      var months = inst / save;
+      O.pay.textContent = months < 1 ? 'меньше месяца'
+        : (months < 24 ? months.toFixed(1).replace('.',',') + ' мес.' : (months/12).toFixed(1).replace('.',',') + ' года');
+    } else { O.pay.textContent = '—' }
+  }
+  Object.keys(R).forEach(function(k){ R[k].addEventListener('input', calc) });
+  ['oYear','oMonth','oPetrol','oGas'].forEach(function(id){ var e=$('#'+id); if(e) e.setAttribute('data-v','0') });
+
+  var ioCalc = new IntersectionObserver(function(e){
+    if(e[0].isIntersecting){ calc(); ioCalc.disconnect() }
+  }, {threshold:0.3});
+  ioCalc.observe($('#calc'));
+
+  /* ---------- цены: переключатель цилиндров ---------- */
+  var PRICES = {
+    '4':{start:'от 29 900 ₽', opt:'от 34 900 ₽', pro:'от 41 900 ₽'},
+    '6':{start:'от 39 900 ₽', opt:'от 45 900 ₽', pro:'от 52 900 ₽'},
+    '8':{start:'от 49 900 ₽', opt:'от 57 900 ₽', pro:'от 64 900 ₽'}
+  };
+  $$('.tab').forEach(function(tab){
+    tab.addEventListener('click', function(){
+      $$('.tab').forEach(function(t){ t.classList.remove('is-on') });
+      tab.classList.add('is-on');
+      var p = PRICES[tab.getAttribute('data-cyl')];
+      $$('[data-price]').forEach(function(el){
+        el.style.transition = 'opacity .25s ease, transform .25s ease';
+        el.style.opacity = '0'; el.style.transform = 'translateY(7px)';
+        setTimeout(function(){
+          el.textContent = p[el.getAttribute('data-price')];
+          el.style.opacity = '1'; el.style.transform = 'none';
+        }, 190);
+      });
+      var base = parseInt(p.start.replace(/\D/g,''), 10);
+      if(R.inst){ R.inst.value = String(base); calc(); }
+    });
+  });
+
+  /* ---------- липкие шаги ---------- */
+  var media = $$('#stepMedia > *'), rail = $$('#stepRail i'), steps = $$('.step');
+  function activate(i){
+    media.forEach(function(m,k){
+      var on = k === i;
+      m.classList.toggle('is-on', on);
+      if(m.tagName === 'VIDEO'){ if(on){ m.play().catch(function(){}) } else { m.pause() } }
+    });
+    rail.forEach(function(r,k){ r.classList.toggle('is-on', k <= i) });
+  }
+  var ioStep = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting) activate(+e.target.getAttribute('data-step'));
+    });
+  }, {threshold:0.5, rootMargin:'-12% 0px -32% 0px'});
+  steps.forEach(function(s){ ioStep.observe(s) });
+
+  /* ---------- анимация газовой магистрали ---------- */
+  var gl = $('#gasLine');
+  if(gl){
+    var ioG = new IntersectionObserver(function(e){
+      if(e[0].isIntersecting){
+        gl.style.transition = 'stroke-dashoffset 2.4s cubic-bezier(.16,1,.3,1) .25s';
+        gl.style.strokeDashoffset = '0';
+        ioG.disconnect();
+      }
+    }, {threshold:0.35});
+    ioG.observe(gl);
+  }
+
+  /* ---------- FAQ ---------- */
+  $$('.q__btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var q = btn.parentElement, a = $('.q__a', q), open = q.classList.contains('is-open');
+      $$('.q.is-open').forEach(function(o){ o.classList.remove('is-open'); $('.q__a',o).style.maxHeight = '0' });
+      if(!open){ q.classList.add('is-open'); a.style.maxHeight = a.scrollHeight + 'px' }
+    });
+  });
+
+  /* ---------- модалка ---------- */
+  var modal = $('#modal');
+  function openModal(){ if(!modal) return; modal.classList.add('is-open'); document.body.style.overflow='hidden'; closeNav() }
+  function closeModal(){ if(!modal) return; modal.classList.remove('is-open'); document.body.style.overflow='' }
+  $$('[data-modal]').forEach(function(b){ b.addEventListener('click', openModal) });
+  $$('[data-close]').forEach(function(b){ b.addEventListener('click', closeModal) });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); closeNav() } });
+
+  /* ---------- заявки: собираем сообщение и открываем WhatsApp ---------- */
+  var WA = '79226969219';   // WhatsApp остаётся на мобильном номере: на 8 800 мессенджера обычно нет
+  function send(form, bodyEl, okEl){
+    var d = new FormData(form), name = (d.get('name')||'').toString().trim(), phone = (d.get('phone')||'').toString().trim();
+    var bad = false;
+    $$('input[required]', form).forEach(function(i){
+      if(!i.value.trim()){ i.style.borderColor = '#E5484D'; bad = true } else { i.style.borderColor = '' }
+    });
+    if(bad) return;
+    var car  = (d.get('car')||'').toString().trim();
+    var goal = (d.get('goal')||'').toString().trim();
+    var msg = 'Здравствуйте! Заявка с сайта na-avtogaz.ru\n\nИмя: ' + name + '\nТелефон: ' + phone;
+    if(car)  msg += '\nАвто: ' + car;
+    if(goal) msg += '\nУслуга: ' + goal;
+    window.open('https://wa.me/' + WA + '?text=' + encodeURIComponent(msg), '_blank');
+    bodyEl.style.display = 'none'; okEl.style.display = 'block';
+  }
+  var mainForm = $('#mainForm');
+  if(mainForm) mainForm.addEventListener('submit', function(e){ e.preventDefault(); send(mainForm, $('#formBody'), $('#formOk')) });
+  var modalForm = $('#modalForm');
+  if(modalForm) modalForm.addEventListener('submit', function(e){ e.preventDefault(); send(modalForm, $('#modalBody'), $('#modalOk')) });
+
+  /* ---------- мелочи ---------- */
+  $('#year').textContent = new Date().getFullYear();
+  if(heroVid){
+    heroVid.play().catch(function(){});
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) heroVid.pause(); else heroVid.play().catch(function(){});
+    });
+  }
+})();
+</script>
