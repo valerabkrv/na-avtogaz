@@ -576,7 +576,7 @@ input[type=range]::-moz-range-thumb{width:24px; height:24px; border-radius:50%; 
       <article class="plan" data-anim="up" style="--d:80ms">
         <div class="plan__name">Старт</div>
         <p class="plan__for">Массовые легковые авто с распределённым впрыском: Lada, Kia, Hyundai, Renault, Chevrolet.</p>
-        <div class="plan__price"><small>под ключ</small><b data-price="start">от 29 900 ₽</b></div>
+        <div class="plan__price"><small>под ключ</small><b data-price="start" data-p4="от 29 900 ₽" data-p6="от 39 900 ₽" data-p8="от 49 900 ₽">от 29 900 ₽</b></div>
         <div class="plan__eq">Alpha, Digitronic — оборудование 4 поколения</div>
         <ul>
           <li>Редуктор, форсунки, фильтры, магистрали</li>
@@ -591,7 +591,7 @@ input[type=range]::-moz-range-thumb{width:24px; height:24px; border-radius:50%; 
         <div class="plan__tag">Выбирают чаще</div>
         <div class="plan__name">Оптима</div>
         <p class="plan__for">Ежедневная езда и такси: ресурсные форсунки и редуктор с запасом по производительности.</p>
-        <div class="plan__price"><small>под ключ</small><b data-price="opt">от 34 900 ₽</b></div>
+        <div class="plan__price"><small>под ключ</small><b data-price="opt" data-p4="от 34 900 ₽" data-p6="от 45 900 ₽" data-p8="от 57 900 ₽">от 34 900 ₽</b></div>
         <div class="plan__eq">Digitronic Maxi, Alpha S, OMVL</div>
         <ul>
           <li>Быстрые форсунки и производительный редуктор</li>
@@ -606,7 +606,7 @@ input[type=range]::-moz-range-thumb{width:24px; height:24px; border-radius:50%; 
       <article class="plan" data-anim="up" style="--d:280ms">
         <div class="plan__name">Про</div>
         <p class="plan__for">Мощные и премиальные двигатели, большие пробеги, внедорожники и микроавтобусы.</p>
-        <div class="plan__price"><small>под ключ</small><b data-price="pro">от 41 900 ₽</b></div>
+        <div class="plan__price"><small>под ключ</small><b data-price="pro" data-p4="от 41 900 ₽" data-p6="от 52 900 ₽" data-p8="от 64 900 ₽">от 41 900 ₽</b></div>
         <div class="plan__eq">BRC, Landi Renzo, Lovato — Италия</div>
         <ul>
           <li>Итальянские компоненты с запасом по мощности</li>
@@ -1156,27 +1156,28 @@ input[type=range]::-moz-range-thumb{width:24px; height:24px; border-radius:50%; 
   }, {threshold:0.3});
   ioCalc.observe($('#calc'));
 
-  /* ---------- цены: переключатель цилиндров ---------- */
-  var PRICES = {
-    '4':{start:'от 29 900 ₽', opt:'от 34 900 ₽', pro:'от 41 900 ₽'},
-    '6':{start:'от 39 900 ₽', opt:'от 45 900 ₽', pro:'от 52 900 ₽'},
-    '8':{start:'от 49 900 ₽', opt:'от 57 900 ₽', pro:'от 64 900 ₽'}
-  };
+  /* ---------- цены: переключатель цилиндров ----------
+     Сами цены лежат в блоке «Цены» — в атрибутах data-p4 / data-p6 / data-p8
+     у каждой строки со стоимостью. Здесь их дублировать не нужно. */
   $$('.tab').forEach(function(tab){
     tab.addEventListener('click', function(){
       $$('.tab').forEach(function(t){ t.classList.remove('is-on') });
       tab.classList.add('is-on');
-      var p = PRICES[tab.getAttribute('data-cyl')];
+      var cyl = tab.getAttribute('data-cyl');
+      var first = null;
       $$('[data-price]').forEach(function(el){
+        var val = el.getAttribute('data-p' + cyl);
+        if(!val) return;
+        if(first === null) first = val;
         el.style.transition = 'opacity .25s ease, transform .25s ease';
         el.style.opacity = '0'; el.style.transform = 'translateY(7px)';
         setTimeout(function(){
-          el.textContent = p[el.getAttribute('data-price')];
+          el.textContent = val;
           el.style.opacity = '1'; el.style.transform = 'none';
         }, 190);
       });
-      var base = parseInt(p.start.replace(/\D/g,''), 10);
-      if(R.inst){ R.inst.value = String(base); calc(); }
+      var base = first ? parseInt(first.replace(/\D/g,''), 10) : 0;
+      if(R.inst && base){ R.inst.value = String(base); calc(); }
     });
   });
 
