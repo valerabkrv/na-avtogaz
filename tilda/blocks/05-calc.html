@@ -1,0 +1,53 @@
+<!-- Калькулятор экономии | сайт na-avtogaz.ru. Текст и цены можно править прямо здесь. -->
+<div class="na">
+<section class="sec" id="calc">
+  <div class="wrap">
+    <div class="hd">
+      <span class="eyebrow" data-anim>Считаем на ваших цифрах</span>
+      <h2 data-anim style="--d:60ms">Сколько вы будете экономить на газе</h2>
+      <p class="lead" data-anim style="--d:140ms">Литр пропана в Челябинске стоит примерно вдвое дешевле бензина. Двигатель на газе расходует чуть больше — это уже учтено в расчёте. Подвиньте ползунки под свой режим езды.</p>
+    </div>
+
+    <div class="calc">
+      <div class="calc__panel" data-anim="left" style="--d:120ms">
+        <div class="field">
+          <div class="field__top"><span class="field__lbl">Пробег в месяц</span><span class="field__val" id="vKm">1 500 <span>км</span></span></div>
+          <input type="range" id="rKm" min="300" max="6000" step="100" value="1500">
+        </div>
+        <div class="field">
+          <div class="field__top"><span class="field__lbl">Расход бензина</span><span class="field__val" id="vFuel">10,0 <span>л / 100 км</span></span></div>
+          <input type="range" id="rFuel" min="5" max="25" step="0.5" value="10">
+        </div>
+        <div class="field">
+          <div class="field__top"><span class="field__lbl">Цена бензина</span><span class="field__val" id="vPb">61 <span>₽ / л</span></span></div>
+          <input type="range" id="rPb" min="45" max="90" step="1" value="61">
+        </div>
+        <div class="field">
+          <div class="field__top"><span class="field__lbl">Цена пропана</span><span class="field__val" id="vPg">33 <span>₽ / л</span></span></div>
+          <input type="range" id="rPg" min="20" max="50" step="1" value="33">
+        </div>
+        <div class="field">
+          <div class="field__top"><span class="field__lbl">Стоимость установки</span><span class="field__val" id="vInst">29 900 <span>₽</span></span></div>
+          <input type="range" id="rInst" min="29900" max="89900" step="1000" value="29900">
+        </div>
+        <p class="calc__hint">В расчёте заложен реальный перерасход на газе — <b>+12 %</b> к бензиновому расходу. Цены топлива подставлены по челябинским АЗС на сентябрь 2026 года, их тоже можно поменять.</p>
+      </div>
+
+      <div class="calc__res" data-anim="right" style="--d:220ms">
+        <div class="calc__big">
+          <small>Экономия за год</small>
+          <b><span id="oYear">43 272</span> ₽</b>
+        </div>
+        <div class="calc__grid">
+          <div><b id="oMonth">3 606 ₽</b><small>экономия в месяц</small></div>
+          <div><b id="oPayback">8,3 мес.</b><small>окупаемость установки</small></div>
+          <div><b id="oPetrol">9 150 ₽</b><small>сейчас тратите на бензин</small></div>
+          <div><b id="oGas">5 544 ₽</b><small>будете тратить на газ</small></div>
+        </div>
+        <p class="calc__note">Расчёт ориентировочный: реальная экономия зависит от стиля езды, состояния двигателя и настройки системы. После установки пересчитаем по факту — на первом ТО.</p>
+        <div class="calc__cta"><a class="btn btn--main btn--wide" href="#popup:zayavka">Узнать точную цену для моего авто</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</div>
