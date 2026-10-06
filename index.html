@@ -1258,9 +1258,22 @@ input[type=range]::-moz-range-thumb{width:24px; height:24px; border-radius:50%; 
       }
     }
   }
-  if(document.readyState === 'complete') fxInit(); else window.addEventListener('load', fxInit);
-  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(fxInit, 60) });
-  var fxW = window.innerWidth, fxT;
+  // Тильда раскрывает блоки не сразу: пока секции нулевой высоты, слой построить нельзя,
+  // поэтому пробуем несколько раз и пересобираем, когда страница меняет высоту.
+  var fxTries = 0;
+  function fxTry(){
+    fxInit(); fxTries++;
+    if(FX.length === 0 && fxTries < 8) setTimeout(fxTry, 400 * fxTries);
+  }
+  if(document.readyState === 'complete') fxTry(); else window.addEventListener('load', fxTry);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ setTimeout(fxTry, 60) });
+  var fxW = window.innerWidth, fxT, fxH = 0;
+  if(window.ResizeObserver){
+    new ResizeObserver(function(){
+      var hh = document.documentElement.scrollHeight;
+      if(Math.abs(hh - fxH) > 200){ fxH = hh; clearTimeout(fxT); fxT = setTimeout(fxInit, 350); }
+    }).observe(document.body);
+  }
   window.addEventListener('resize', function(){
     clearTimeout(fxT);
     fxT = setTimeout(function(){ if(Math.abs(window.innerWidth - fxW) > 40){ fxW = window.innerWidth; fxInit(); } }, 250);
