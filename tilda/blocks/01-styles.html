@@ -483,30 +483,37 @@ html{scroll-behavior:auto}
   padding-bottom:clamp(72px,10vw,136px) !important;
 }
 #rec5082288401 .t678{padding:0 !important}
-#rec5082288401 .t-container,
-#rec5082288401 .t-col{max-width:560px !important; margin-left:auto !important; margin-right:auto !important; float:none !important}
-#rec5082288401 .t678__wrapper{
-  background:#ffffff !important;
-  border-radius:28px !important;
-  padding:clamp(24px,3vw,34px) !important;
-  box-shadow:0 2px 4px rgba(16,22,28,.05), 0 18px 44px rgba(16,22,28,.09) !important;
-}
-#rec5082288401 .t678__title,
-#rec5082288401 .t678__title *{
+/* заголовок и описание карточки */
+#rec5082288401 .t-section__container{margin-bottom:0 !important; padding-bottom:0 !important}
+#rec5082288401 .t-section__title,
+#rec5082288401 .t-section__title *{
   font-family:'Manrope',sans-serif !important;
   font-weight:800 !important;
   font-size:clamp(20px,2.2vw,26px) !important;
   letter-spacing:-.02em !important;
   line-height:1.2 !important;
   color:#0E1116 !important;
-  margin-bottom:8px !important;
+  margin-bottom:10px !important;
 }
-#rec5082288401 .t678__descr,
-#rec5082288401 .t678__descr *{
+#rec5082288401 .t-section__descr,
+#rec5082288401 .t-section__descr *{
   font-family:'Inter',sans-serif !important;
   font-size:15px !important;
   line-height:1.55 !important;
   color:#414A56 !important;
+  margin-bottom:0 !important;
+}
+/* ширина колонок — карточка по центру */
+#rec5082288401 .t-container{max-width:600px !important}
+#rec5082288401 .t-col{max-width:560px !important; margin-left:auto !important; margin-right:auto !important; float:none !important}
+#rec5082288401 .t-prefix_2{margin-left:auto !important}
+/* сама карточка */
+#rec5082288401 .t-form{
+  background:#ffffff !important;
+  border-radius:28px !important;
+  padding:clamp(24px,3vw,34px) !important;
+  box-shadow:0 2px 4px rgba(16,22,28,.05), 0 18px 44px rgba(16,22,28,.09) !important;
+  margin-top:26px !important;
 }
 #rec5082288401 .t-input{
   font-family:'Inter',sans-serif !important;
@@ -524,7 +531,8 @@ html{scroll-behavior:auto}
 }
 #rec5082288401 .t-input::placeholder{color:#727C88 !important; opacity:1 !important}
 #rec5082288401 .t-input-phonemask__select{border-radius:14px 0 0 14px !important}
-#rec5082288401 .t-submit{
+#rec5082288401 .t-submit,
+#rec5082288401 .t-btnflex_type_submit{
   font-family:'Manrope',sans-serif !important;
   font-weight:700 !important;
   font-size:16px !important;
@@ -533,17 +541,20 @@ html{scroll-behavior:auto}
   border:0 !important;
   border-radius:100px !important;
   background:linear-gradient(180deg,#43D310,#35C40A) !important;
+  background-color:#35C40A !important;
   color:#08210A !important;
   box-shadow:0 10px 26px rgba(53,196,10,.34) !important;
   transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s !important;
 }
-#rec5082288401 .t-submit:hover{transform:translateY(-2px); box-shadow:0 16px 38px rgba(53,196,10,.44) !important}
-#rec5082288401 .t-form__bottom-text,
-#rec5082288401 .t-form__bottom-text *{
+#rec5082288401 .t-submit:hover,
+#rec5082288401 .t-btnflex_type_submit:hover{transform:translateY(-2px); box-shadow:0 16px 38px rgba(53,196,10,.44) !important}
+#rec5082288401 .t678__form-bottom-text,
+#rec5082288401 .t678__form-bottom-text *{
   font-family:'Inter',sans-serif !important;
   font-size:12.5px !important;
   line-height:1.5 !important;
   color:#727C88 !important;
+  margin-top:14px !important;
 }
 #rec5082288401 .t-form__successbox,
 #rec5082288401 .t-form__errorbox-middle{
