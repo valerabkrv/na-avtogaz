@@ -68,3 +68,85 @@
   font-family:'Inter',sans-serif !important;
   border-radius:14px !important;
 }
+
+/* ==========================================================
+   Блок формы «Рассчитать стоимость» — родной блок Тильды BF204N
+   (#rec5082288401). Стоит сразу под текстовым блоком «Узнайте
+   точную цену…» и подогнан под него: тот же светлый фон секции,
+   белая карточка, наши шрифты и зелёная кнопка.
+   ВАЖНО: если блок пересоздать, у него поменяется номер rec —
+   тогда поменяйте его и здесь.
+   ========================================================== */
+#rec5082288401{
+  background-color:#F4F6F7 !important;
+  padding-top:0 !important;
+  padding-bottom:clamp(72px,10vw,136px) !important;
+}
+#rec5082288401 .t678{padding:0 !important}
+#rec5082288401 .t-container,
+#rec5082288401 .t-col{max-width:560px !important; margin-left:auto !important; margin-right:auto !important; float:none !important}
+#rec5082288401 .t678__wrapper{
+  background:#ffffff !important;
+  border-radius:28px !important;
+  padding:clamp(24px,3vw,34px) !important;
+  box-shadow:0 2px 4px rgba(16,22,28,.05), 0 18px 44px rgba(16,22,28,.09) !important;
+}
+#rec5082288401 .t678__title,
+#rec5082288401 .t678__title *{
+  font-family:'Manrope',sans-serif !important;
+  font-weight:800 !important;
+  font-size:clamp(20px,2.2vw,26px) !important;
+  letter-spacing:-.02em !important;
+  line-height:1.2 !important;
+  color:#0E1116 !important;
+  margin-bottom:8px !important;
+}
+#rec5082288401 .t678__descr,
+#rec5082288401 .t678__descr *{
+  font-family:'Inter',sans-serif !important;
+  font-size:15px !important;
+  line-height:1.55 !important;
+  color:#414A56 !important;
+}
+#rec5082288401 .t-input{
+  font-family:'Inter',sans-serif !important;
+  height:56px !important;
+  border:1px solid #D3DADE !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  color:#0E1116 !important;
+  font-size:16px !important;
+  padding:0 18px !important;
+}
+#rec5082288401 .t-input:focus{
+  border-color:#35C40A !important;
+  box-shadow:0 0 0 4px rgba(53,196,10,.14) !important;
+}
+#rec5082288401 .t-input::placeholder{color:#727C88 !important; opacity:1 !important}
+#rec5082288401 .t-input-phonemask__select{border-radius:14px 0 0 14px !important}
+#rec5082288401 .t-submit{
+  font-family:'Manrope',sans-serif !important;
+  font-weight:700 !important;
+  font-size:16px !important;
+  height:56px !important;
+  width:100% !important;
+  border:0 !important;
+  border-radius:100px !important;
+  background:linear-gradient(180deg,#43D310,#35C40A) !important;
+  color:#08210A !important;
+  box-shadow:0 10px 26px rgba(53,196,10,.34) !important;
+  transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s !important;
+}
+#rec5082288401 .t-submit:hover{transform:translateY(-2px); box-shadow:0 16px 38px rgba(53,196,10,.44) !important}
+#rec5082288401 .t-form__bottom-text,
+#rec5082288401 .t-form__bottom-text *{
+  font-family:'Inter',sans-serif !important;
+  font-size:12.5px !important;
+  line-height:1.5 !important;
+  color:#727C88 !important;
+}
+#rec5082288401 .t-form__successbox,
+#rec5082288401 .t-form__errorbox-middle{
+  font-family:'Inter',sans-serif !important;
+  border-radius:14px !important;
+}
