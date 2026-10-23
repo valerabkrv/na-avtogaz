@@ -1,0 +1,70 @@
+/* ==========================================================
+   Поп-ап «Заявка» — блок формы Тильды, открывается ссылкой
+   href="#popup:zayavka". Внешний вид подогнан под сайт.
+   Содержимое (поля, тексты, куда приходят заявки) настраивается
+   в самой Тильде: Контент и Настройки блока.
+   ========================================================== */
+.t-popup[data-tooltip-hook="#popup:zayavka"]{
+  background-color:rgba(8,11,14,.72) !important;
+  backdrop-filter:blur(8px);
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-popup__container{
+  background:#ffffff !important;
+  border-radius:28px !important;
+  padding:clamp(26px,4vw,40px) !important;
+  max-width:520px !important;
+  box-shadow:0 30px 80px rgba(16,22,28,.28) !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-popup__block-close{background:transparent !important}
+
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-name,
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-title,
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-title *{
+  font-family:'Manrope',sans-serif !important;
+  font-weight:800 !important;
+  letter-spacing:-.03em !important;
+  color:#0E1116 !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-descr,
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-descr *{
+  font-family:'Inter',sans-serif !important;
+  color:#414A56 !important;
+  font-size:15px !important;
+  line-height:1.55 !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-input,
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-input-phonemask__wrap .t-input{
+  font-family:'Inter',sans-serif !important;
+  height:56px !important;
+  border:1px solid #D3DADE !important;
+  border-radius:14px !important;
+  background:#fff !important;
+  color:#0E1116 !important;
+  font-size:16px !important;
+  padding:0 18px !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-input:focus{
+  border-color:#35C40A !important;
+  box-shadow:0 0 0 4px rgba(53,196,10,.14) !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-submit{
+  font-family:'Manrope',sans-serif !important;
+  font-weight:700 !important;
+  font-size:16px !important;
+  height:56px !important;
+  border-radius:100px !important;
+  border:0 !important;
+  background:linear-gradient(180deg,#43D310,#35C40A) !important;
+  color:#08210A !important;
+  box-shadow:0 10px 26px rgba(53,196,10,.34) !important;
+  transition:transform .35s cubic-bezier(.16,1,.3,1), box-shadow .35s !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-submit:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 38px rgba(53,196,10,.44) !important;
+}
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-form__errorbox-item,
+.t-popup[data-tooltip-hook="#popup:zayavka"] .t-form__successbox{
+  font-family:'Inter',sans-serif !important;
+  border-radius:14px !important;
+}

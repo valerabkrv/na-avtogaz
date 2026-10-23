@@ -22,7 +22,7 @@ SECTIONS = [
     ('ГЕРОЙ',                 'hero',     'Первый экран с видеообложкой'),
     ('БЕГУЩАЯ СТРОКА',        'marquee',  'Бегущая строка брендов'),
     ('КАЛЬКУЛЯТОР ЭКОНОМИИ',  'calc',     'Калькулятор экономии'),
-    ('ЦЕНЫ',                  'price',    'Цены на установку ГБО'),
+    ('РАСЧЁТ ЦЕНЫ',           'price',    'Заявка на расчёт цены'),
     ('КАК ПРОХОДИТ УСТАНОВКА','how',      'Как проходит установка (5 шагов)'),
     ('СХЕМА ГБО',             'scheme',   'Из чего состоит ГБО'),
     ('ОБСЛУЖИВАНИЕ И РЕМОНТ', 'service',  'Обслуживание и ремонт'),
@@ -147,6 +147,9 @@ def main():
     body, _ = cut_div(body, '<div class="modal" id="modal">')
     body = replace_div(body, '<div class="form" data-anim="right" style="--d:180ms">',
                        CTA_CARD % {'popup': a.popup})
+    # форму расчёта в Тильде отдаёт родной блок формы, который стоит сразу за этой секцией
+    body = replace_div(body, '<div class="form lead-box__form" data-anim="up" style="--d:300ms">', '')
+    body, _ = cut_div(body, '<div class="form__ok" id="leadOk">')
     body = re.sub(r'<button([^>]*?)\sdata-modal\b([^>]*)>(.*?)</button>',
                   lambda m: '<a class="%s" href="#popup:%s">%s</a>' % (
                       (re.search(r'class="([^"]*)"', m.group(1) + m.group(2)) or
